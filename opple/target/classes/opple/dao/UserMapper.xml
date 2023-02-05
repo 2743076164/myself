@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="opple.dao.UserMapper">
+	<select id="allUser" resultType="opple.pojo.User">
+		select * from user
+	</select>
+	<select id="selectUserById" parameterType="Integer" resultType="opple.pojo.User">
+		select * from user where id=#{id}
+	</select>
+	
+	
+	<select 
+	    id="userLogin" parameterType="String"
+		resultType="opple.pojo.User">
+		select * from user where username=#{username}
+	</select>
+	
+	
+	<select 
+	    id="selectUserByUsername" parameterType="String"
+		resultType="opple.pojo.User">
+		select * from user where username like concat('%',#{username},'%')
+	</select>
+	<select id="selectByUsername1" parameterType="String" resultType="opple.pojo.User">
+	    select * from user where username like concat('%',#{username},'%')
+	</select>
+	<select id="selectByUsername" parameterType="String" resultType="opple.pojo.User">
+	    select * from user where username like concat('%',#{username},'%')
+	</select>
+	<select id="selectByRegistertime" parameterType="String" resultType="opple.pojo.User">
+	    select * from user where registertime=#{registertime}
+	</select>
+
+	<insert id="insertUser" parameterType="opple.pojo.User">
+		insert into user (id,username,password,role,registertime,cardid,address,telephone)
+		values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{role,jdbcType=VARCHAR}, #{registertime,jdbcType=TIMESTAMP}, #{cardid,jdbcType=CHAR},#{address,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="insertUseradd" parameterType="opple.pojo.User">
+		insert into user (id,username,password,role,registertime,cardid,address,telephone)
+		values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{role,jdbcType=VARCHAR}, #{registertime,jdbcType=TIMESTAMP}, #{cardid,jdbcType=CHAR},#{address,jdbcType=VARCHAR},#{telephone,jdbcType=VARCHAR})
+	</insert>
+
+
+	<insert id="inserUser" parameterType="opple.pojo.User">
+		insert into user
+		(username,password,role,cardid,address,telephone)
+		values(#{username},#{password},#{role},#{cardid},#{address},#{telephone})
+	</insert>
+	
+	<update id="updateUser" parameterType="opple.pojo.User">
+	
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      role = #{role,jdbcType=VARCHAR},
+      registertime = #{registertime,jdbcType=TIMESTAMP},
+      cardid = #{cardid,jdbcType=CHAR},
+      address = #{address,jdbcType=VARCHAR},
+      telephone = #{telephone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+	
+	<delete id="deleteUser">
+		delete from user where username=#{username}
+	</delete>
+	
+	<delete id="deleteUserId">
+		delete from user where id=#{id}
+	</delete>
+	
+	<select id="selectAllUser" resultMap="userWithOrder">
+		select * from user
+   </select>
+
+	<resultMap id="userWithOrder" type="opple.pojo.User">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="username" jdbcType="VARCHAR" property="username" />
+		<result column="password" jdbcType="VARCHAR" property="password" />
+		<result column="role" jdbcType="VARCHAR" property="role" />
+		<result column="registertime" jdbcType="TIMESTAMP" property="registertime" />
+		<result column="cardid" jdbcType="CHAR" property="cardid" />
+
+		<collection property="order" column="id" ofType="opple.pojo.Order"
+			select="opple.dao.OrderMapper.selectOrderByUid" />	
+	</resultMap>
+	
+	
+</mapper>
