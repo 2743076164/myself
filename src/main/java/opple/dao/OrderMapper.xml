@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="opple.dao.OrderMapper">
+
+	<insert id="insert" parameterType="opple.pojo.Order">
+		insert into `order` (id,money,number,receiverAddress,receiverName,receiverPhone,paystate,ordertime,uid)
+values (#{id},#{money},#{number},#{receiverAddress},#{receiverName},#{receiverPhone},#{paystate},#{ordertime},#{uid})
+	</insert>
+	
+	
+	
+	<select id="selectOrderByUid" parameterType="Integer" resultMap="orderWithOrderList">
+		select * from `order` where uid=#{id}
+	</select>
+
+	<resultMap id="orderWithOrderList" type="opple.pojo.Order">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="money" jdbcType="DOUBLE" property="money" />
+		<result column="number" jdbcType="INTEGER" property="number" />
+		<result column="receiverAddress" jdbcType="VARCHAR" property="receiverAddress" />
+		<result column="receiverName" jdbcType="VARCHAR" property="receiverName" />
+		<result column="receiverPhone" jdbcType="VARCHAR" property="receiverPhone" />
+		<result column="paystate" jdbcType="VARCHAR" property="paystate" />
+		<result column="ordertime" jdbcType="TIMESTAMP" property="ordertime" />
+		<result column="uid" jdbcType="INTEGER" property="uid" />
+
+		<collection property="orderlist" column="id"
+			ofType="opple.pojo.Orderlist" select="opple.dao.OrderListMapper.selectOrderlistByOid">
+			<result column="oid" jdbcType="String" property="oid" />
+			<result column="pid" jdbcType="INTEGER" property="pid" />
+			<result column="buynum" jdbcType="INTEGER" property="buynum" />
+		</collection>
+	</resultMap>
+	
+	
+
+</mapper>

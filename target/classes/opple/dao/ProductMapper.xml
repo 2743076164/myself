@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="opple.dao.ProductMapper">
+	<select id="allProduct" resultType="opple.pojo.Product">
+		select * from product
+	</select>
+	
+	<select id="products" resultType="opple.pojo.Product">
+		select * from product
+	</select>
+	<select id="selectProductById" resultType="opple.pojo.Product">
+		select * from product where id=#{id}
+	</select>
+	<select id="selectaProductById" resultType="opple.pojo.Product">
+		select * from product where id=#{id}
+	</select>
+	<select id="AllProduct" resultType="opple.pojo.Product">
+		select * from product
+	</select>
+	
+	<select id="countByCategory" resultType="opple.pojo.Product">
+		SELECT category,COUNT(category) FROM product GROUP BY category
+	</select>
+	
+	<select id="selectProductnumByCategory" resultType="opple.pojo.GroupByCategory">
+	SELECT category ,COUNT(category) as num from product GROUP BY category
+</select>
+	
+	
+	
+	<select id="selectProductByProductname" parameterType="String" resultType="opple.pojo.Product">
+	    select * from product where productname like concat('%',#{productname},'%')
+	</select>
+	<insert id="insertProduct" parameterType="opple.pojo.Product">
+		insert into product
+		(productname,category,price,image,barcode,qrcode,description,protime)
+		values(#{productname},#{category},#{price},#{image},#{barcode},#{qrcode},#{description},#{protime})
+	</insert>
+	<update id="updateProduct" parameterType="opple.pojo.Product">
+	
+    update product
+    <set>
+      <if test="productname != null">
+        productname = #{productname,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="image != null">
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="protime != null">
+        protime = #{protime,jdbcType=DATE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+	</update>
+	
+	
+	<delete id="deleteProduct">
+		delete from product where id=#{id}
+	</delete>
+
+</mapper>

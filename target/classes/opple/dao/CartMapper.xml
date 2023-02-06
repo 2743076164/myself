@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="opple.dao.CartMapper">
+<select id="selectCartByUserId" parameterType="opple.pojo.Cart"
+		resultType="opple.pojo.Cart">
+		select * from cart where userId=#{id}
+</select>
+	
+<select id="selectCartByUserandProduct" parameterType="opple.pojo.Cart"
+		resultType="opple.pojo.Cart">
+		select * from cart where userId=#{userId} and productId=#{productId}
+</select>
+
+<insert id="insertToCart" parameterType="opple.pojo.Cart">
+		insert into cart (
+		productId, userId, number, status, cartTime)
+		values ( #{productId},
+		#{userId}, #{number}, #{status}, #{cartTime})
+</insert>
+
+<update id="updateCart" parameterType="opple.pojo.Cart">
+		update cart set cartTime = #{cartTime}, number=#{number} where id=#{id}
+</update>
+
+
+<select id="allCart" resultType="opple.pojo.Cart">
+		select * from cart
+</select>
+
+<select id="selectnumberByProductId" resultType="opple.pojo.NumberByproduct">
+	SELECT productId,SUM(number)as number from cart GROUP BY productId
+</select>
+
+<select id="selectCartWithProductByUserId" parameterType="opple.pojo.Cart"
+		resultMap="CartWithProduct">
+		select * from cart,product where cart.userId=#{id}  and	 cart.productId=product.id
+</select>
+
+
+	<resultMap type="opple.pojo.Cart" id="CartWithProduct">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="productId" jdbcType="INTEGER" property="productId" />
+		<result column="userId" jdbcType="INTEGER" property="userId" />
+		<result column="number" jdbcType="INTEGER" property="number" />
+		<result column="status" jdbcType="INTEGER" property="status" />
+		<result column="cartTime" jdbcType="DATE" property="cartTime" />
+		 <association property="product" column="productId" javaType="opple.pojo.Product" 
+			select="opple.dao.ProductMapper.selectaProductById"></association> 
+	</resultMap>
+
+
+</mapper>
